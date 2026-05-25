@@ -648,7 +648,7 @@ card.addEventListener('click',function(e){
 
 // ── Countdown ──
 function updateCd(){
-  const diff=new Date('2026-07-25T20:00:00')-new Date();
+  const diff=new Date('2026-07-25T16:00:00')-new Date();
   if(diff<=0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='٠');return;}
   const v={d:Math.floor(diff/86400000),h:Math.floor((diff%86400000)/3600000),m:Math.floor((diff%3600000)/60000),s:Math.floor((diff%60000)/1000)};
   Object.entries(v).forEach(([k,n])=>{
