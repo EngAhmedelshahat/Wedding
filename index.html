@@ -56,46 +56,104 @@ html,body{
   position:fixed;inset:0;z-index:9999;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   cursor:pointer;overflow:hidden;
-  background:radial-gradient(ellipse at 50% 55%,#1a2560 0%,#06101e 100%);
+  background:radial-gradient(ellipse 90% 90% at 50% 42%,#1c2e72 0%,#07101f 100%);
 }
-#env-cv{position:absolute;inset:0;z-index:0}
+#env-cv{position:absolute;inset:0;z-index:0;pointer-events:none}
 .env-ring{
-  position:absolute;z-index:1;border-radius:50%;border:1px solid rgba(212,168,67,.25);
-  animation:borderShine 3s ease-in-out infinite;
+  position:absolute;top:50%;left:50%;z-index:1;
+  border-radius:50%;border:1px solid rgba(212,168,67,.22);
+  animation:envRingOut 4s ease-out infinite;pointer-events:none;
 }
-.env-box{
+@keyframes envRingOut{
+  0%  {transform:translate(-50%,-50%) scale(.45);opacity:.85}
+  100%{transform:translate(-50%,-50%) scale(1.7);opacity:0}
+}
+.env-scene{
   position:relative;z-index:2;
-  width:min(330px,88vw);height:210px;
-  border:1.5px solid rgba(212,168,67,.48);border-radius:14px;overflow:hidden;
-  animation:envBounce .95s .3s cubic-bezier(.34,1.56,.64,1) both;
-  background:linear-gradient(155deg,#2e4898,#1e3488,#162878);
-  box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1px rgba(212,168,67,.1),0 0 50px rgba(80,120,255,.12);
+  animation:envBounce .9s .3s cubic-bezier(.34,1.56,.64,1) both,
+            envFloat 4s 2.5s ease-in-out infinite;
+  filter:drop-shadow(0 30px 60px rgba(0,0,0,.8)) drop-shadow(0 0 50px rgba(60,110,230,.25));
 }
-.env-flap{
-  position:absolute;top:0;left:0;right:0;height:136px;
-  clip-path:polygon(0 0,50% 68%,100% 0);
-  border-bottom:1.5px solid rgba(212,168,67,.38);
-  transform-origin:top center;
-  background:linear-gradient(155deg,#3a58a8,#2a4898);
-  animation:flapOpen 1.1s 1.7s cubic-bezier(.34,1.56,.64,1) forwards;
-}
-.env-seal{
-  position:absolute;top:52px;left:50%;transform:translateX(-50%);
-  width:48px;height:48px;border-radius:50%;
-  background:conic-gradient(#a87010,#f0d060,#c89828,#f8e878,#a87010);
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;
-  box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 30px rgba(212,168,67,.55);
-  animation:sealSpin .45s 1.62s both;
-}
-.env-names{
-  position:absolute;bottom:26px;left:50%;transform:translateX(-50%);
-  white-space:nowrap;font-family:'Scheherazade New',serif;font-size:1.42rem;
-  color:rgba(255,255,255,.92);letter-spacing:4px;
-}
-.env-label{position:relative;z-index:2;margin-top:28px;font-family:'Scheherazade New',serif;font-size:1.38rem;color:rgba(255,255,255,.72);letter-spacing:4.5px;animation:envBounce .8s .55s both}
-.env-hint{position:relative;z-index:2;margin-top:13px;font-size:.8rem;color:rgba(255,255,255,.32);letter-spacing:2.5px;animation:hintFade 5s 3s both}
+@keyframes envFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
+/* SVG envelope */
+.env-svg-wrap{
+  width:min(360px,86vw);
+  position:relative;
+}
+.env-svg-wrap svg{width:100%;display:block}
+
+/* wax seal */
+.env-seal{
+  position:absolute;
+  left:50%;
+  top:44%;   /* sits on the flap/body join */
+  transform:translate(-50%,-50%);
+  z-index:10;
+  width:58px;height:58px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#fff8a0,#f0c820 30%,#b88810 65%,#7a5008 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:#3a2000;
+  box-shadow:
+    0 0 0 3px rgba(212,168,67,.5),
+    0 0 0 7px rgba(212,168,67,.18),
+    0 0 0 13px rgba(212,168,67,.07),
+    0 8px 28px rgba(0,0,0,.65),
+    0 0 55px rgba(212,168,67,.6);
+  animation:sealSpin .45s 1.8s both, sealGlow 3.5s 2.8s ease-in-out infinite;
+}
+@keyframes sealGlow{
+  0%,100%{box-shadow:0 0 0 3px rgba(212,168,67,.5),0 0 0 7px rgba(212,168,67,.18),0 0 0 13px rgba(212,168,67,.07),0 8px 28px rgba(0,0,0,.65),0 0 55px rgba(212,168,67,.6)}
+  50%{box-shadow:0 0 0 4px rgba(212,168,67,.75),0 0 0 10px rgba(212,168,67,.3),0 0 0 18px rgba(212,168,67,.12),0 8px 28px rgba(0,0,0,.65),0 0 85px rgba(212,168,67,.8)}
+}
+.env-seal::before{content:'';position:absolute;inset:5px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35)}
+.env-seal::after{content:'';position:absolute;width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.22);top:10px;left:11px}
+
+/* names inside envelope body */
+.env-inner-text{
+  position:absolute;
+  left:50%;bottom:18%;
+  transform:translateX(-50%);
+  width:80%;text-align:center;
+  z-index:5;
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+}
+.env-gold-line{
+  width:75%;height:.6px;
+  background:linear-gradient(90deg,transparent,rgba(212,168,67,.7),transparent);
+  animation:glowPulse 3s ease-in-out infinite;
+}
+.env-names-txt{
+  font-family:'Scheherazade New',serif;font-size:1.65rem;font-weight:700;
+  letter-spacing:5px;
+  background:linear-gradient(90deg,#9a7010,#ddc038,#fff8c8,#ffd700,#ddc038,#9a7010);
+  background-size:220% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmerGold 4s linear infinite;
+  filter:drop-shadow(0 0 14px rgba(212,168,67,.4));
+  white-space:nowrap;
+}
+.env-sub-txt{
+  font-size:.76rem;color:rgba(212,168,67,.72);letter-spacing:3px;
+}
+
+.env-label{
+  position:relative;z-index:2;margin-top:36px;
+  font-family:'Scheherazade New',serif;font-size:1.38rem;
+  color:rgba(255,255,255,.75);letter-spacing:5px;
+  animation:envBounce .8s .55s both;
+  text-shadow:0 0 24px rgba(120,160,255,.3);
+}
+.env-hint{
+  position:relative;z-index:2;margin-top:10px;
+  font-size:.75rem;color:rgba(255,255,255,.28);letter-spacing:2.5px;
+  animation:hintFade 5s 3s both;
+}
+
+@keyframes flapOpenSVG{
+  from{transform:rotateX(0deg)}
+  to{transform:rotateX(-180deg)}
+}
 /* ══ CARD ══ */
 .card{
   position:relative;z-index:1;
@@ -317,13 +375,80 @@ html,body{
 <!-- ══ ENVELOPE ══ -->
 <div id="env">
   <canvas id="env-cv"></canvas>
-  <div class="env-ring" style="width:420px;height:420px;top:50%;left:50%;margin:-210px 0 0 -210px;animation-delay:0s"></div>
-  <div class="env-ring" style="width:560px;height:560px;top:50%;left:50%;margin:-280px 0 0 -280px;animation-delay:.8s;opacity:.5"></div>
-  <div class="env-box">
-    <div class="env-flap"></div>
-    <div class="env-seal">♥</div>
-    <div class="env-names">أحمد &amp; حبيبه</div>
+  <div class="env-ring" style="width:320px;height:320px;animation-delay:0s"></div>
+  <div class="env-ring" style="width:490px;height:490px;animation-delay:1.4s;opacity:.5"></div>
+  <div class="env-ring" style="width:650px;height:650px;animation-delay:2.8s;opacity:.28"></div>
+
+  <div class="env-scene">
+    <div class="env-svg-wrap">
+      <svg viewBox="0 0 360 240" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#2a449a"/>
+            <stop offset="100%" stop-color="#102068"/>
+          </linearGradient>
+          <linearGradient id="flapG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#3050b0"/>
+            <stop offset="100%" stop-color="#1e3888"/>
+          </linearGradient>
+          <linearGradient id="foldLG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%"   stop-color="rgba(0,0,0,.22)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          </linearGradient>
+          <linearGradient id="foldRG" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="rgba(0,0,0,.22)"/>
+            <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+          </linearGradient>
+          <filter id="envShadow">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(0,0,0,.4)"/>
+          </filter>
+        </defs>
+
+        <!-- envelope body rectangle -->
+        <rect x="0" y="0" width="360" height="240" rx="8" fill="url(#bodyG)"
+              stroke="rgba(212,168,67,.48)" stroke-width="1.5"/>
+
+        <!-- bottom-left fold shadow -->
+        <polygon points="0,240 180,120 0,120" fill="url(#foldLG)" opacity=".6"/>
+        <!-- bottom-right fold shadow -->
+        <polygon points="360,240 180,120 360,120" fill="url(#foldRG)" opacity=".6"/>
+        <!-- center bottom crease -->
+        <line x1="180" y1="120" x2="180" y2="240" stroke="rgba(212,168,67,.1)" stroke-width="1"/>
+
+        <!-- flap (closed = triangle pointing DOWN from top) -->
+        <g style="transform-origin:180px 0;animation:flapOpenSVG 1s 1.9s cubic-bezier(.34,1.56,.64,1) forwards">
+          <polygon points="0,0 360,0 180,138" fill="url(#flapG)"
+                   stroke="rgba(212,168,67,.48)" stroke-width="1.5" stroke-linejoin="round"/>
+          <!-- flap highlight -->
+          <polygon points="0,0 360,0 180,70" fill="rgba(255,255,255,.045)"/>
+          <!-- flap bottom edge line -->
+          <line x1="4" y1="2" x2="180" y2="135" stroke="rgba(212,168,67,.3)" stroke-width=".8"/>
+          <line x1="356" y1="2" x2="180" y2="135" stroke="rgba(212,168,67,.3)" stroke-width=".8"/>
+        </g>
+
+        <!-- top-left fold (behind flap) -->
+        <polygon points="0,0 0,120 180,120" fill="rgba(255,255,255,.03)"/>
+        <!-- top-right fold -->
+        <polygon points="360,0 360,120 180,120" fill="rgba(0,0,0,.06)"/>
+
+        <!-- inner envelope glow -->
+        <rect x="1" y="1" width="358" height="238" rx="7.5"
+              fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+      </svg>
+
+      <!-- wax seal -->
+      <div class="env-seal">♥</div>
+
+      <!-- inner text -->
+      <div class="env-inner-text">
+        <div class="env-gold-line"></div>
+        <div class="env-names-txt">أحمد &amp; حبيبه</div>
+        <div class="env-sub-txt">دعوة زفاف — يوليو ٢٠٢٦</div>
+        <div class="env-gold-line"></div>
+      </div>
+    </div>
   </div>
+
   <div class="env-label">دعوة زفاف مباركة</div>
   <div class="env-hint">✦ اضغط لفتح الدعوة ✦</div>
 </div>
@@ -648,7 +773,7 @@ card.addEventListener('click',function(e){
 
 // ── Countdown ──
 function updateCd(){
-  const diff=new Date('2026-07-25T16:00:00')-new Date();
+  const diff=new Date('2026-07-25T20:00:00')-new Date();
   if(diff<=0){['cd-d','cd-h','cd-m','cd-s'].forEach(id=>document.getElementById(id).textContent='٠');return;}
   const v={d:Math.floor(diff/86400000),h:Math.floor((diff%86400000)/3600000),m:Math.floor((diff%3600000)/60000),s:Math.floor((diff%60000)/1000)};
   Object.entries(v).forEach(([k,n])=>{
